@@ -22,5 +22,12 @@ namespace webapi.Controllers
         {
             return await Mediator.Send(new ConsultaID.Ejecuta { Id = id});
         }
+
+        [HttpPost]
+        public async Task<Unit> PostNuevoCurso(Nuevo.Ejecuta data)
+        {
+            var res = await Mediator.Send(data);
+            return res;
+        }       
     }
 }
