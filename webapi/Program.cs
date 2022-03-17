@@ -9,62 +9,41 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using persistencia;
 using webapi.Middleware;
 
-var builder = WebApplication.CreateBuilder(args);
-
-IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("appSettings.json", optional: false)
-            .Build();
-
-
-// Add services to the container.
-
-builder.Services.AddControllers(
-        
-    ).AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
-
-var build = builder.Services.AddIdentityCore<Usuario>();
-var identityBuilder = new IdentityBuilder(build.UserType, builder.Services);
-identityBuilder.AddEntityFrameworkStores<cursosbasesContext>();
-identityBuilder.AddSignInManager<SignInManager<Usuario>>();
-builder.Services.TryAddSingleton<ISystemClock, SystemClock>();
-
-
-
-
-
-builder.Services.AddDbContext<cursosbasesContext>(opt => {
-    opt.UseMySQL(configuration.GetConnectionString("SefiplanConnection"));
-});
-builder.Services.AddMediatR(typeof(Consulta.Handler).Assembly);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(c =>
+namespace webapi
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    public class Program
     {
-        Title =" Servicios de mantenimiento de cursos",
-        Version ="v1"
-    });
-    c.CustomSchemaIds(c => c.FullName);
-});
+        public static void Main(string[] args)
+        {
+            var hostServer = CreateHostBuilder(args).Build();
 
-var app = builder.Build();
+            using (var ambiente = hostServer.Services.CreateScope())
+            {
+                var services = ambiente.ServiceProvider;
+                try
+                {
+                    //para creaci?n de usuarios de prueba
+                    var userManager = services.GetRequiredService<UserManager<Usuario>>();
+                    var context = services.GetRequiredService<cursosbasesContext>();
+                    context.Database.Migrate();
+                    DataUsuarios.InsertarData(context, userManager).Wait();
+                }
+                catch (Exception ex)
+                {
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseMiddleware<ManejadorErrorMiddleware>();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cursos online v1");
-    });
+                    var loggin = services.GetRequiredService<ILogger<Program>>();
+                    loggin.LogError(ex, "Ocurrio un error en la migracion");
+                }
+
+            }
+
+            hostServer.Run();
+        }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
