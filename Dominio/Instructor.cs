@@ -12,7 +12,7 @@ namespace Dominio
             Cursoinstructors = new HashSet<Cursoinstructor>();
         }
 
-        public int Idinstructor { get; set; }
+        public Guid Idinstructor { get; set; }
         public string Nombre { get; set; }
         public string Apellidos { get; set; }
         public string Grado { get; set; }

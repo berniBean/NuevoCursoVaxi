@@ -24,10 +24,22 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<Unit> PostNuevoCurso(Nuevo.Ejecuta data)
+        public async Task<ActionResult<Unit>> PostNuevoCurso(Nuevo.Ejecuta data)
         {
             var res = await Mediator.Send(data);
             return res;
-        }       
+        }
+        [HttpPut]
+        public async Task<ActionResult<Unit>> PutEditarCurso(int id, Editar.Ejecuta data)
+        {
+            data.Idcurso = id;
+            return await Mediator.Send(data);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> DeleteCurso(int id)
+        {
+            return await Mediator.Send(new Eliminar.Ejecuta { Id = id });
+        }
     }
 }

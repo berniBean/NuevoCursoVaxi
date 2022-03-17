@@ -1,5 +1,6 @@
 ﻿
 using Dominio;
+using FluentValidation;
 using MediatR;
 using persistencia;
 
@@ -12,6 +13,16 @@ namespace aplicacion.Cursos
             public string Nombre { get; set; }
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
+        }
+
+        public class EjectaValidacion : AbstractValidator<Ejecuta>
+        {
+            public EjectaValidacion()
+            {
+                RuleFor(x => x.Nombre).NotEmpty();
+                RuleFor(x => x.Descripcion).NotEmpty();
+                RuleFor(x => x.FechaPublicacion).NotEmpty();
+            }
         }
 
         public class Handler : HandlerRequestBase, IRequestHandler<Ejecuta>

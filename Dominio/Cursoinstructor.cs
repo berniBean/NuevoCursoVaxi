@@ -7,8 +7,8 @@ namespace Dominio
 {
     public partial class Cursoinstructor
     {
-        public int Idcurso { get; set; }
-        public int Idinstructor { get; set; }
+        public Guid Idcurso { get; set; }
+        public Guid Idinstructor { get; set; }
 
         public virtual Curso IdcursoNavigation { get; set; }
         public virtual Instructor IdinstructorNavigation { get; set; }

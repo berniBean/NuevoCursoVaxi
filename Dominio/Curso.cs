@@ -14,7 +14,7 @@ namespace Dominio
             Precios = new HashSet<Precio>();
         }
 
-        public int Idcurso { get; set; }
+        public Guid Idcurso { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public DateTime? FechaPublicacion { get; set; }
