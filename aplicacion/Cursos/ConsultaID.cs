@@ -15,7 +15,7 @@ namespace aplicacion.Cursos
     {
         public class Ejecuta : EjecutaRespuestaGen<Curso>
         {
-            public int Id { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class Handler : HandlerRequestBase, IRequestHandler<Ejecuta, Curso>

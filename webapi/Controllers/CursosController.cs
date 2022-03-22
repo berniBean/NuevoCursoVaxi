@@ -12,13 +12,14 @@ namespace webapi.Controllers
     {
 
         [HttpGet]
+        
         public async Task<ActionResult<List<Curso>>> GetCursos()
         {
             return await Mediator.Send(new Consulta.Ejecuta());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Curso>> GetCursoId(int id)
+        public async Task<ActionResult<Curso>> GetCursoId(Guid id)
         {
             return await Mediator.Send(new ConsultaID.Ejecuta { Id = id});
         }

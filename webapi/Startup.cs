@@ -1,13 +1,19 @@
-﻿using aplicacion.Cursos;
+﻿using aplicacion.Contratos;
+using aplicacion.Cursos;
 using Dominio;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using persistencia;
+using Seguridad.TokenSeguridad;
+using System.Text;
 using webapi.Middleware;
 
 namespace webapi
@@ -22,12 +28,36 @@ namespace webapi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
+            services.AddControllers(
+                    opt =>
+                    {
+                        var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                        opt.Filters.Add(new AuthorizeFilter(policy));
+                    }
+                ).AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
+
             var builder = services.AddIdentityCore<Usuario>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<cursosbasesContext>();
             identityBuilder.AddSignInManager<SignInManager<Usuario>>();
             services.TryAddSingleton<ISystemClock, SystemClock>();
+
+            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("InstitutoYakurefu"));
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+                opt => {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = Key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+                    });
+
+            services.AddScoped<IJwtGenerador, JwtGenerador>();
+            services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+
 
 
 
