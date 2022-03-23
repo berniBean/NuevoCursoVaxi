@@ -13,6 +13,8 @@ namespace aplicacion.Cursos
             public string Nombre { get; set; }
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
+
+            public List<Guid> ListaInstructor { get; set; }
         }
 
         public class EjectaValidacion : AbstractValidator<Ejecuta>
@@ -33,14 +35,32 @@ namespace aplicacion.Cursos
 
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
+                Guid _cursoId = Guid.NewGuid();
                 var curso = new Curso
                 {
+                    Idcurso = _cursoId,
                     Nombre = request.Nombre,
                     Descripcion = request.Descripcion,
                     FechaPublicacion = request.FechaPublicacion
                 };
 
                 _context.Cursos.Add(curso);
+
+
+                if(request.ListaInstructor != null)
+                {
+                    foreach (var item in request.ListaInstructor)
+                    {
+                        var Cursoinst = new Cursoinstructor
+                        {
+                            Idcurso = _cursoId,
+                            Idinstructor = item
+                        };
+                        _context.Cursoinstructors.Add(Cursoinst);
+                    }
+                }
+
+
                 var res = await _context.SaveChangesAsync();
 
                 if (res > 0)

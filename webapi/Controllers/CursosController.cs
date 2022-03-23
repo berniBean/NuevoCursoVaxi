@@ -1,11 +1,14 @@
 ﻿using aplicacion.Cursos;
+using aplicacion.DTO;
 using Dominio;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace webapi.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class CursosController : MiControllerBase
@@ -13,7 +16,7 @@ namespace webapi.Controllers
 
         [HttpGet]
         
-        public async Task<ActionResult<List<Curso>>> GetCursos()
+        public async Task<ActionResult<List<CursoDTO>>> GetCursos()
         {
             return await Mediator.Send(new Consulta.Ejecuta());
         }

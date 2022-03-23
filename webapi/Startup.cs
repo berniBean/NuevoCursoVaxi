@@ -16,6 +16,7 @@ using Seguridad.TokenSeguridad;
 using System.Text;
 using webapi.Middleware;
 
+
 namespace webapi
 {
     public class Startup
@@ -59,6 +60,7 @@ namespace webapi
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
 
 
+            services.AddAutoMapper(typeof(Consulta.Handler));
 
 
             services.AddDbContext<cursosbasesContext>(opt => {
