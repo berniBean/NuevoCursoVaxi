@@ -1,6 +1,5 @@
 ﻿using aplicacion.Cursos;
 using aplicacion.DTO;
-using Dominio;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,7 @@ namespace webapi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Curso>> GetCursoId(Guid id)
+        public async Task<ActionResult<CursoDTO>> GetCursoId(Guid id)
         {
             return await Mediator.Send(new ConsultaID.Ejecuta { Id = id});
         }
@@ -33,15 +32,15 @@ namespace webapi.Controllers
             var res = await Mediator.Send(data);
             return res;
         }
-        [HttpPut]
-        public async Task<ActionResult<Unit>> PutEditarCurso(int id, Editar.Ejecuta data)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> PutEditarCurso(Guid id, Editar.Ejecuta data)
         {
             data.Idcurso = id;
             return await Mediator.Send(data);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> DeleteCurso(int id)
+        public async Task<ActionResult<Unit>> DeleteCurso(Guid id)
         {
             return await Mediator.Send(new Eliminar.Ejecuta { Id = id });
         }

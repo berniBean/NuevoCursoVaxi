@@ -10,6 +10,5 @@ namespace aplicacion.DTO
         public string Comentario1 { get; set; }
         public Guid CursoId { get; set; }
 
-        public virtual CursoDTO Curso { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using aplicacion.ManejadorError;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using persistencia;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace aplicacion.Cursos
     {
         public class Ejecuta : IRequest
         {
-            public int Id { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class Handler : HandlerRequestBase, IRequestHandler<Ejecuta>
@@ -25,6 +26,25 @@ namespace aplicacion.Cursos
 
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
+                var instructoresDB = _context.Cursoinstructors.Where(x => x.Idcurso.Equals(request.Id));
+                
+                foreach (var item in instructoresDB)               
+                    _context.Cursoinstructors.Remove(item);
+
+                var comentarios = _context.Comentarios.Where(x => x.CursoId.Equals(request.Id));
+                foreach (var item in comentarios)
+                {
+                    _context.Comentarios.Remove(item);
+                }
+
+                var precioDb = await _context.Precios.Where(x => x.CursoId.Equals(request.Id)).FirstOrDefaultAsync();
+                if (precioDb != null)
+                {
+                    _context.Precios.Remove(precioDb);
+                }
+                    
+                
+
                 var find = await _context.Cursos.FindAsync(request.Id);
 
                 if (find == null)
