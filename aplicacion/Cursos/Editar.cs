@@ -36,6 +36,7 @@ namespace aplicacion.Cursos
                 curso.Nombre = request.Nombre ?? curso.Nombre;
                 curso.Descripcion = request.Descripcion ?? curso.Descripcion;
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+                curso.FechaCreacion = DateTime.UtcNow;
 
 
                 //actualizar precios 

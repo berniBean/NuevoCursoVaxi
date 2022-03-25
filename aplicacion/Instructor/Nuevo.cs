@@ -28,6 +28,7 @@ namespace aplicacion.Instructor
                     Nombre = request.Nombre,
                     Apellidos = request.Apellidos,
                     Grado = request.Grado,
+                    FechaIngreso = DateTime.UtcNow
                 };
 
                 await _context.Instructors.AddAsync(inst);

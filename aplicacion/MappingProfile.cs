@@ -17,7 +17,7 @@ namespace aplicacion
 
             CreateMap<Cursoinstructor, CursoInstructorDTO>();
             CreateMap<Dominio.Instructor, InstructorDTO>();
-            CreateMap<Comentario, ComentarioDTO>();
+            CreateMap<Dominio.Comentario, ComentarioDTO>();
             CreateMap<Precio, PrecioDTO>();
 
 

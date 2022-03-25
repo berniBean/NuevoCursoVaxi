@@ -13,6 +13,7 @@ namespace Dominio
         public string Comentario1 { get; set; }
         public Guid CursoId { get; set; }
 
+        public DateTime? FechaCreacion { get; set; }
         public virtual Curso Curso { get; set; }
     }
 }

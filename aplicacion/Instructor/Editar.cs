@@ -34,6 +34,7 @@ namespace aplicacion.Instructor
                 inst.Apellidos = request.Apellidos ?? inst.Apellidos;
                 inst.Grado = request.Grado ?? inst.Grado;
                 inst.Foto = request.Foto ?? inst.Foto;
+                inst.FechaIngreso = DateTime.UtcNow;
 
                 var resultado = await _context.SaveChangesAsync();
 

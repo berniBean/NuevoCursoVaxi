@@ -12,8 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using persistencia;
+using persistencia.DapperConexion;
 using Seguridad.TokenSeguridad;
 using System.Text;
+using webapi.Controllers;
 using webapi.Middleware;
 
 
@@ -39,6 +41,10 @@ namespace webapi
 
             var builder = services.AddIdentityCore<Usuario>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+
+            identityBuilder.AddRoles<IdentityRole>();
+            identityBuilder.AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<Usuario, IdentityRole>>();
+
             identityBuilder.AddEntityFrameworkStores<cursosbasesContext>();
             identityBuilder.AddSignInManager<SignInManager<Usuario>>();
             services.TryAddSingleton<ISystemClock, SystemClock>();
@@ -58,6 +64,7 @@ namespace webapi
 
             services.AddScoped<IJwtGenerador, JwtGenerador>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+            
 
 
             services.AddAutoMapper(typeof(Consulta.Handler));
@@ -66,7 +73,11 @@ namespace webapi
             services.AddDbContext<cursosbasesContext>(opt => {
                 opt.UseMySQL(Configuration.GetConnectionString("SefiplanConnection"));
             });
+
+            services.Configure<ConexionConfiguracion>(Configuration.GetSection("ConnectionStrings"));
+
             services.AddMediatR(typeof(Consulta.Handler).Assembly);
+            services.AddMediatR(typeof(MostrarRoles.Handler).Assembly);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddSwaggerGen(c =>

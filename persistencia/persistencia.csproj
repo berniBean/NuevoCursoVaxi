@@ -8,6 +8,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
   </ItemGroup>
 
   <ItemGroup>

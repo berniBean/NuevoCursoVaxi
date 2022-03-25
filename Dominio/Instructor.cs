@@ -18,6 +18,8 @@ namespace Dominio
         public string Grado { get; set; }
         public string Foto { get; set; }
 
+        public DateTime? FechaIngreso { get; set; }
+
         public virtual ICollection<Cursoinstructor> Cursoinstructors { get; set; }
     }
 }
