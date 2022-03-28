@@ -46,13 +46,15 @@ namespace aplicacion.Seguridad
                     throw new ManejadorExcepcion(HttpStatusCode.Unauthorized);
 
                 var resultado = await _singInManager.CheckPasswordSignInAsync(usuario, request.Password, false);
-                
+                var resultadoRoles = await _userManager.GetRolesAsync(usuario);
+                var listaRoles = new List<string>(resultadoRoles);
+
                 if (resultado.Succeeded)
                 {
                     return new UserDto
                     {
                         NombreCompleto = usuario.NombreCompleto,
-                        Token = _jwtGenerador.CrearToken(usuario),
+                        Token = _jwtGenerador.CrearToken(usuario, listaRoles),
                         Email = usuario.Email,
                         UserName = usuario.UserName
                         

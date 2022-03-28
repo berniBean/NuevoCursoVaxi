@@ -18,6 +18,7 @@ namespace webapi.Controllers
             return res;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<InstructorDTO>>> GetInstructor()
         {

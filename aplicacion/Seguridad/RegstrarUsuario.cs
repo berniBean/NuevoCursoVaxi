@@ -61,11 +61,13 @@ namespace aplicacion.Seguridad
                 };
 
                 var res =await _userManager.CreateAsync(usuario, request.Password);
+                var resultadoRoles = await _userManager.GetRolesAsync(usuario);
+                var listaRoles = new List<string>(resultadoRoles);
                 if (res.Succeeded)
                     return new UserDto
                     {
                         NombreCompleto = usuario.NombreCompleto,
-                        Token = _jwtGenerador.CrearToken(usuario),
+                        Token = _jwtGenerador.CrearToken(usuario, listaRoles),
                         UserName = usuario.UserName
                     };
 
