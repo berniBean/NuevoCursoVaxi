@@ -2,7 +2,6 @@
 using Dominio;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using persistencia;
 
 namespace aplicacion.Seguridad
 {

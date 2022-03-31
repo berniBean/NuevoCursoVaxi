@@ -31,6 +31,9 @@ namespace webapi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("corsApp", builder => {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
             services.AddControllers(
                     opt =>
                     {
@@ -93,6 +96,7 @@ namespace webapi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("corsApp");
             if (env.IsDevelopment())
             {
                 app.UseMiddleware<ManejadorErrorMiddleware>();

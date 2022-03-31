@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [Route("api/[controller]")]
     public class ComentariosController : MiControllerBase
     {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class InstructorController : MiControllerBase
